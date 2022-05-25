@@ -21,9 +21,9 @@ public class HelloImpl extends UnicastRemoteObject implements Hello {
 	public static void main(String[] args) {
 		try {
 			HelloImpl obj = new HelloImpl();
-
+			Registry registry = LocateRegistry.createRegistry(1099);
 			// registry import and bind
-			Registry registry = LocateRegistry.getRegistry();
+			registry = LocateRegistry.getRegistry();
 			registry.rebind("Hello", obj);
 
 			System.err.println("server ready");
