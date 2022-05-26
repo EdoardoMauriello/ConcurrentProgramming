@@ -5,4 +5,6 @@ import java.rmi.RemoteException;
 
 public interface Hello extends Remote {
 	String sayHello() throws RemoteException;
+
+	String sayHello(Persona p) throws RemoteException;
 }

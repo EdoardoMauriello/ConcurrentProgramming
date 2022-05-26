@@ -33,4 +33,9 @@ public class HelloImpl extends UnicastRemoteObject implements Hello {
 		}
 	}
 
+	@Override
+	public String sayHello(Persona p) throws RemoteException {
+		return "Hello, " + p.getNome();
+	}
+
 }

@@ -13,6 +13,7 @@ public class Client {
 			// this Hello type stub contains declarations to methods in the server
 			Hello stub = (Hello) registry.lookup("Hello");
 			System.out.println(stub.sayHello());
+			System.out.println(stub.sayHello(new Persona("Edoardo", "pasubio", 19)));
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		} catch (NotBoundException e) {
