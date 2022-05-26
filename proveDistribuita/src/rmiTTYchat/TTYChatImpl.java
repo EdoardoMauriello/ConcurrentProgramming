@@ -4,17 +4,18 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class TTYChatImpl extends UnicastRemoteObject implements TTYChat {
 
-	List<TTYChatClient> occupants;
-
 	private static final long serialVersionUID = 1L;
 
+	List<TTYChatClient> occupants;
+
 	protected TTYChatImpl() throws RemoteException {
-		super();
+		occupants = new ArrayList<>();
 	}
 
 	@Override
@@ -24,13 +25,15 @@ public class TTYChatImpl extends UnicastRemoteObject implements TTYChat {
 	}
 
 	@Override
-	public void saySomething(String s, TTYChatClient c) throws RemoteException {
+	public synchronized void saySomething(String s, TTYChatClient c) throws RemoteException {
 		String message = c.name() + ": " + s;
 		System.out.println(Thread.currentThread() + ":Server: got " + message);
 		for (Iterator<TTYChatClient> iterator = occupants.iterator(); iterator.hasNext();) {
 			TTYChatClient ttyChatClient = (TTYChatClient) iterator.next();
+			if (c.name().equals(ttyChatClient.name()))
+				continue;
 			try {
-				ttyChatClient.somethingSaid(s);
+				ttyChatClient.somethingSaid(c.name(), s);
 			} catch (Exception e) {
 				System.out.println("Someone left");
 				occupants.remove(ttyChatClient);
@@ -46,7 +49,7 @@ public class TTYChatImpl extends UnicastRemoteObject implements TTYChat {
 			registry = LocateRegistry.getRegistry();
 			registry.rebind("TTYCHAT", obj);
 			System.out.println("TTYCHAT bound in registry");
-			System.err.println("server ready");
+			System.out.println("server ready");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -18,8 +18,8 @@ public class TTYChatClientImpl extends UnicastRemoteObject implements TTYChatCli
 	}
 
 	@Override
-	public void somethingSaid(String something) throws RemoteException {
-		System.out.println(something);
+	public void somethingSaid(String senderName, String something) throws RemoteException {
+		System.out.println(senderName + ": " + something);
 
 	}
 
